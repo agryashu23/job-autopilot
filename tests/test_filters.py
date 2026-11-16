@@ -43,6 +43,15 @@ def test_external_apply_ignores_easy_apply_and_other_sources():
 
 
 # ---------------------------------------------------------------- pay
+def test_strip_html_handles_entity_encoded_greenhouse_content():
+    from autopilot.sources_ats import _strip_html
+    encoded = ("&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;GitLab is the "
+               "platform&amp;nbsp;for DevSecOps &amp;amp; more.&lt;/p&gt;&lt;/div&gt;")
+    assert _strip_html(encoded) == "GitLab is the platform for DevSecOps & more."
+    assert _strip_html("<p>Plain <b>HTML</b></p>") == "Plain HTML"
+    assert _strip_html(None) == ""
+
+
 def test_rate_extraction():
     assert extract_hourly_rate("Pay: Upto $55/hr, remote") == "Upto $55/hr"
     assert extract_hourly_rate("USD 20 - 60 per hour").lower().startswith("usd 20")

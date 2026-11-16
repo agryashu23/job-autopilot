@@ -4,6 +4,7 @@ All of these are official, intentionally-public JSON endpoints — no login,
 no key, no scraping. Unknown ATS company tokens just 404 and are skipped;
 extend the lists in config.yaml (ats_companies) freely.
 """
+import html
 import re
 
 import requests
@@ -14,7 +15,13 @@ HDRS = {"User-Agent": UA, "Accept": "application/json"}
 
 
 def _strip_html(text: str) -> str:
-    return re.sub(r"<[^>]+>", " ", text or "")
+    """HTML -> plain text. Greenhouse's `content` is entity-ENCODED HTML
+    ('&lt;div&gt;...'), so unescape before stripping tags, then once more for
+    entities that were inside the markup ('&amp;nbsp;' -> '&nbsp;' -> ' ')."""
+    text = html.unescape(text or "")
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = html.unescape(text).replace("\xa0", " ")
+    return re.sub(r"\s+", " ", text).strip()
 
 
 # ---------------------------------------------------------------- remotive
