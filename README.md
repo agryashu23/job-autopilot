@@ -1,5 +1,7 @@
 # Job Autopilot
 
+[![CI](https://github.com/agryashu23/job-autopilot/actions/workflows/ci.yml/badge.svg)](https://github.com/agryashu23/job-autopilot/actions/workflows/ci.yml)
+
 **A local-first, AI-ranked job pipeline for remote contract work.** It pulls
 postings from seven sources, applies hard filters, ranks what survives with an
 explainable scoring model built on local embeddings and a local LLM, and gives
@@ -231,9 +233,9 @@ run.py         single CLI entry point
 python run.py test
 ```
 
-11 unit tests cover the contract-signal filter, external-apply detection
+12 unit tests (run by CI on Linux and Windows, Python 3.12 and 3.13) cover the contract-signal filter, external-apply detection
 (including LinkedIn's safety-redirect unwrapping), pay-rate extraction and the
-USD floor, aggregator blocking, lifecycle expiry, status transitions and
+USD floor, aggregator blocking, Greenhouse HTML cleanup, lifecycle expiry, status transitions and
 run-history bookkeeping.
 
 ## Design decisions I'd defend in a review
