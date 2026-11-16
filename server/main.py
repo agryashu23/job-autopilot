@@ -192,6 +192,7 @@ def runs():
     """Recent discovery runs. While a run is in progress the live log file is
     shown; otherwise the last run's stored log."""
     con = db.connect()
+    db.close_stale_runs(con)
     recent = db.recent_runs(con, 10)
     running = _running()
     if running:

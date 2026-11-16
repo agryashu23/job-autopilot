@@ -141,7 +141,25 @@ def expire_stale(con, approved_ttl_days: int, queue_ttl_days: int, now: int = No
 
 
 # ---------------------------------------------------------------- run history
+STALE_RUN_SECONDS = 2 * 3600   # a normal discovery run takes ~10 minutes
+
+
+def close_stale_runs(con, max_age: int = STALE_RUN_SECONDS, now: int = None) -> int:
+    """A run whose process died (PC slept, window closed, crash) never reaches
+    finish_run and would show as 'in progress' forever. Close any run that has
+    been open far longer than a real run takes."""
+    now = now or int(time.time())
+    cur = con.execute(
+        "UPDATE runs SET finished_at=?, ok=0, "
+        "summary='interrupted (process ended before finishing)' "
+        "WHERE finished_at IS NULL AND started_at < ?",
+        (now, now - max_age))
+    con.commit()
+    return cur.rowcount
+
+
 def start_run(con, kind: str) -> int:
+    close_stale_runs(con)
     cur = con.execute("INSERT INTO runs (kind, started_at) VALUES (?, ?)",
                       (kind, int(time.time())))
     con.commit()

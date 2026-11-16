@@ -132,3 +132,26 @@ def test_run_history_roundtrip():
     runs = db.recent_runs(con)
     assert runs[0]["id"] == rid and runs[0]["ok"] == 1
     assert db.run_log(con, rid) == "line1\nline2"
+
+
+def test_stale_unfinished_run_is_closed_as_interrupted():
+    con = _mem()
+    now = int(time.time())
+    con.execute("INSERT INTO runs (kind, started_at) VALUES ('discover', ?)", (now - 5 * 3600,))
+    con.commit()
+    assert db.close_stale_runs(con, now=now) == 1
+    run = db.recent_runs(con)[0]
+    assert run["ok"] == 0 and run["finished_at"] == now
+    assert run["summary"].startswith("interrupted")
+
+
+def test_live_run_is_not_closed_and_new_run_cleans_up():
+    con = _mem()
+    live = db.start_run(con, "discover")          # just started: must stay open
+    assert db.close_stale_runs(con) == 0
+    assert db.recent_runs(con)[0]["finished_at"] is None
+    con.execute("UPDATE runs SET started_at=? WHERE id=?", (int(time.time()) - 3 * 3600, live))
+    con.commit()
+    db.start_run(con, "discover")                 # next run closes the dead one
+    old = [r for r in db.recent_runs(con) if r["id"] == live][0]
+    assert old["finished_at"] is not None and old["ok"] == 0

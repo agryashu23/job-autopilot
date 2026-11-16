@@ -233,10 +233,10 @@ run.py         single CLI entry point
 python run.py test
 ```
 
-12 unit tests (run by CI on Linux and Windows, Python 3.12 and 3.13) cover the contract-signal filter, external-apply detection
+14 unit tests (run by CI on Linux and Windows, Python 3.12 and 3.13) cover the contract-signal filter, external-apply detection
 (including LinkedIn's safety-redirect unwrapping), pay-rate extraction and the
 USD floor, aggregator blocking, Greenhouse HTML cleanup, lifecycle expiry, status transitions and
-run-history bookkeeping.
+run-history bookkeeping (including closing runs whose process died).
 
 ## Design decisions I'd defend in a review
 
