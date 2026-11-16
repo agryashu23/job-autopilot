@@ -1,0 +1,134 @@
+# ============================================================
+# Answer bank (copy to answers.yaml, git-ignored) for application questionnaires (apply kit, Chrome
+# extension autofill, opt-in bots). Matching is case-insensitive
+# substring — the FIRST pattern that matches the question wins,
+# so put specific phrases before generic ones.
+#
+# answer types:
+#   text:   fills a text input
+#   number: fills a numeric input
+#   choice: picks radio/select option whose label contains the value
+#   bool:   Yes/No radio buttons
+# ============================================================
+
+answers:
+  - match: ["years of experience with node", "experience in node"]
+    type: number
+    value: 3
+
+  - match: ["years of experience with react", "experience in react"]
+    type: number
+    value: 3
+
+  - match: ["years of experience with aws", "experience in aws"]
+    type: number
+    value: 2
+
+  - match: ["years of experience with python", "experience in python"]
+    type: number
+    value: 2
+
+  - match: ["kubernetes", "eks", "k8s"]
+    type: number
+    value: 1
+
+  - match: ["docker", "containeriz"]
+    type: number
+    value: 2
+
+  - match: ["leading or mentoring", "mentoring a development team", "team lead",
+            "leadership experience", "managing a team", "sprint governance"]
+    type: text
+    value: "Yes, 1.5 years as technical lead (interim CTO) owning architecture, sprint planning and mentoring"
+
+  - match: ["typescript"]
+    type: number
+    value: 2
+
+  - match: ["mongodb", "nosql"]
+    type: number
+    value: 2
+
+  # Total must never be LESS than any single-skill answer above.
+  - match: ["total years", "overall experience", "years of work experience", "total experience"]
+    type: number
+    value: 3
+
+  # ---- availability / engagement -----------------------------------------
+  - match: ["hours per week", "hours a week", "how many hours", "weekly availability",
+            "availability per week", "hours can you commit", "hours/week"]
+    type: text
+    value: "Up to 40 hours/week"
+
+  - match: ["open to part-time", "open to part time", "part-time availability", "part time role"]
+    type: bool
+    value: true
+
+  - match: ["full-time employment", "full time employment", "full-time position",
+            "permanent position", "convert to full-time", "open to full-time"]
+    type: bool
+    value: false
+
+  - match: ["engagement type", "employment type", "type of engagement", "preferred engagement"]
+    type: choice
+    value: "Contract"
+
+  - match: ["notice period", "how soon can you join", "when can you start", "availability to start",
+            "earliest start"]
+    type: text
+    value: "Immediately available"
+
+  # ---- pay ---------------------------------------------------------------
+  - match: ["current ctc", "current salary", "current annual"]
+    type: text
+    value: "Prefer not to disclose; open to discussing rate"
+
+  - match: ["expected ctc", "expected salary", "salary expectation", "expected annual",
+            "rate expectation", "hourly rate", "expected rate", "desired rate"]
+    type: text
+    value: "USD 30/hour (negotiable based on scope)"
+
+  # ---- logistics ---------------------------------------------------------
+  - match: ["are you comfortable working remotely", "remote work", "work from home"]
+    type: bool
+    value: true
+
+  - match: ["willing to relocate", "relocation"]
+    type: bool
+    value: false
+
+  - match: ["authorized to work", "work authorization", "legally authorized"]
+    type: bool
+    value: true
+
+  - match: ["require sponsorship", "visa sponsorship", "need sponsorship"]
+    type: bool
+    value: false
+
+  - match: ["bachelor", "degree"]
+    type: bool
+    value: true
+
+  - match: ["english", "proficiency"]
+    type: choice
+    value: "Professional"
+
+  - match: ["linkedin profile", "linkedin url"]
+    type: text
+    value: "https://www.linkedin.com/in/your-profile"
+
+  - match: ["github", "portfolio", "website"]
+    type: text
+    value: "https://github.com/your-handle"
+
+  - match: ["phone", "mobile", "contact number"]
+    type: text
+    value: "+910000000000"
+
+  - match: ["city", "current location", "where are you located", "where do you live"]
+    type: text
+    value: "Your City, State"
+
+  - match: ["overlap with us", "us hours", "est hours", "pst hours", "time zone", "timezone"]
+    type: bool
+    value: true

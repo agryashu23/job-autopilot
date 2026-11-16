@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Job Autopilot Autofill",
+  "version": "1.0",
+  "description": "Fills job application forms from your local Job Autopilot profile. You always click submit.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Fill this application"
+  },
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["http://localhost:5580/*"],
+  "icons": {}
+}

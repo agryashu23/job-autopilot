@@ -1,0 +1,135 @@
+# ============================================================
+# Job Autopilot — configuration
+# Copy to config.yaml (git-ignored), edit, then: python run.py discover
+# ============================================================
+
+profile:
+  name: "Your Name"
+  email: "you@example.com"
+  phone: "0000000000"
+  phone_country: "+91"
+  location: "India (Remote)"
+  linkedin: "https://www.linkedin.com/in/your-profile"
+  github: "https://github.com/your-handle"
+  resume_path: "C:/path/to/your_resume.pdf"
+  years_experience: 3
+  expected_rate_usd_hr: 30          # what you quote; the floor below is what you filter on
+  availability_hours_per_week: 40   # quoted in cover notes / answers
+  notice_period_days: 0             # contract work: immediate
+  # Optional cover-note template. Placeholders: {name} {years} {job_title} {company} {avail} {github}
+  # cover_note: >-
+  #   Hi, I'm {name}, ... The {job_title} role at {company} matches my stack ... {avail}. GitHub: {github}
+
+search:
+  # Each term is searched on every enabled source
+  terms:
+    - "Node.js developer contract"
+    - "full stack developer contract remote"
+    - "backend engineer Node.js remote"
+    - "React Node.js contract"
+    - "freelance full stack developer"
+    - "freelance Node.js"
+    - "freelance web developer remote"
+    - "part-time Node.js developer"
+    - "CouchDB"
+  # Hard filters — a job must pass ALL of these
+  must_be_remote: true
+  strict_remote: true    # REJECT onsite/hybrid/WFO wording unless it says fully remote
+  contract_only: true    # REJECT listings with no contract/freelance/hourly/part-time signal
+  countries: ["india", "worldwide"]
+  max_age_days: 3                       # only jobs posted in the last N days
+  # Pay floor in USD/hour. A listing that advertises a clearly lower USD rate is
+  # stored as a near miss, never queued. INR rates and unstated pay are not judged.
+  rate_floor_usd_hr: 25
+  exclude_title_keywords: ["intern", "junior", ".net", "php", "wordpress", "sap", "salesforce",
+    "classic asp", "vbscript", "cobol", "drupal", "shopify", "magento",
+    "account executive", "sales", "recruiter", "recruiting", "talent", "candidate experience",
+    "hr business", "coordinator", "analyst",
+    "counsel", "legal", "paralegal", "marketing manager", "product manager",
+    "program manager", "project manager", "customer success", "people ",
+    "office manager", "executive assistant", "accountant", "controller",
+    "director,", "vice president", "chief of staff"]
+  # Aggregators that repost other companies' jobs as "Easy Apply" and then send
+  # you off-site. Whole-name match ("Hired" blocks "Hired Inc", not "Hiredly").
+  exclude_companies: ["Hired", "Crossing Hurdles", "Hire Feed", "Jobs Ai", "Jobs AI"]
+
+lifecycle:
+  approved_ttl_days: 14   # approved but never applied for this long -> expired
+  queue_ttl_days: 21      # un-reviewed for this long -> expired (posting is dead by then)
+
+scoring:
+  # score = sum of matched keyword weights found in title+description
+  keywords:
+    node: 3
+    nodejs: 3
+    "node.js": 3
+    express: 2
+    react: 2
+    couchdb: 5        # rare skill = high leverage
+    pouchdb: 1
+    aws: 3
+    lambda: 2
+    cloudfront: 2
+    python: 2
+    mongodb: 2
+    websocket: 2
+    rabbitmq: 2
+    redis: 2
+    microservice: 2
+    typescript: 2
+    flutter: 1
+    docker: 1
+  title_bonus: 2          # extra points if keyword appears in the title
+  contract_bonus: 4       # explicit contract/freelance/hourly/part-time in listing
+  hourly_bonus: 6         # explicit hourly rate ("$40/hr") — your #1 target
+  min_score_to_queue: 4   # below this, job is stored but not queued
+
+  # ---- AI match weights (must add up to 100) ----------------------------
+  weights:
+    must_have_coverage: 30
+    role_title_semantic: 16
+    skills_semantic: 14
+    experience_years: 14
+    skill_overlap: 10
+    experience_domain: 6
+    pay: 6
+    seniority: 4
+
+sources:
+  linkedin: true          # via jobspy public search (no login needed for discovery)
+  linkedin_easy_apply_only: true
+  naukri: true            # needs the debug Chrome window (python run.py chrome); skipped otherwise
+  remoteok: true
+  weworkremotely: true
+  remotive: true
+  ats: true               # Greenhouse/Lever public boards (registry below)
+
+# Verified live on 2026-10-04 (tokens that 404 are reported in the run log).
+ats_companies:
+  greenhouse:
+    - gitlab
+    - vercel
+    - cloudflare
+    - mongodb
+    - twilio
+    - stripe
+    - coinbase
+    - reddit
+    - figma
+    - databricks
+    - elastic
+    - grafanalabs
+  lever:
+    - articulate
+
+schedule:
+  time: "07:30"           # daily discovery via Windows Task Scheduler (python run.py schedule)
+
+# Opt-in Playwright auto-apply (python run.py apply --yes). Not part of the
+# daily flow: it violates LinkedIn/Naukri ToS and has never finished a run.
+apply:
+  daily_cap_linkedin: 15
+  daily_cap_naukri: 30
+  min_delay_seconds: 20
+  max_delay_seconds: 75
+  chrome_debug_port: 9222

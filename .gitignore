@@ -1,0 +1,20 @@
+.venv/
+chrome-profile/
+__pycache__/
+*.pyc
+web/node_modules/
+jobs.db
+jobs.db-journal
+logs/
+*.pdf
+.pytest_cache/
+
+# Personal data: never committed. Fresh clones use the *.example.* templates.
+config.yaml
+answers.yaml
+profile.json
+resume/
+jobs.db.bak-*
+*.db-wal
+*.db-shm
+.venv.*/
